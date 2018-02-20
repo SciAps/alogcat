@@ -110,6 +110,9 @@ public class LogActivity extends ListActivity
         mLogList.setSelection(mLogEntryAdapter.getCount() - 1);
     }
 
+    private static final String s_pattern = "yyyy-MM-dd hh:mm:ss ";
+    private static final SimpleDateFormat s_simpleDateFormat = new SimpleDateFormat(s_pattern);
+
     private void cat(final String s)
     {
         if (mLogEntryAdapter.getCount() > WINDOW_SIZE)
@@ -131,7 +134,7 @@ public class LogActivity extends ListActivity
         final LogEntry entry = new LogEntry(s, level);
         mLogEntryAdapter.add(entry);
 
-        final LogEntry saveEntry = new LogEntry(s, level);
+        final LogEntry saveEntry = new LogEntry(s_simpleDateFormat.format(new Date()) + s, level);
         mSaveLogEntries.add(saveEntry);
 
         if (mSaveLogEntries.size() > SAVE_LOG_SIZE)
@@ -409,7 +412,7 @@ public class LogActivity extends ListActivity
                 share();
                 return true;
             case MENU_SAVE:
-                File f = save(mLogEntryAdapter.getEntries(), false);
+                File f = save(mSaveLogEntries, true);
                 String msg = getResources().getString(R.string.saving_log,
                         f.toString());
                 Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
