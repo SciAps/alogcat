@@ -1,13 +1,29 @@
 apply plugin: 'com.android.application'
 
+/*
+ * Gets the version name from the latest Git tag
+ */
+def getVersionName = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe', '--tags', '--long'
+        standardOutput = stdout
+    }
+    def retval = stdout.toString().trim()
+    println(retval)
+    return retval
+}
+
 android {
-    compileSdkVersion 10
+    compileSdkVersion 17
     buildToolsVersion "26.0.2"
 
     defaultConfig {
         applicationId "com.sciaps.alogcat"
-        minSdkVersion 3
-        targetSdkVersion 11
+        minSdkVersion 17
+        targetSdkVersion 17
+        versionCode 1
+        versionName getVersionName()
     }
 
     buildTypes {
